@@ -1,26 +1,26 @@
 # TODO (Khangaroo): Make this process a lot less hacky (no, export did not work)
 # See MakefileNSO
 
-.PHONY: all clean starlight send
+.PHONY: all clean orionsbelt send
 
-S2VER ?= 102
-S2VERSTR ?= 1.0.2
-S2ROMTYPE ?= US
+SWSHVER ?= 131
+SWSHVERSTR ?= 1.3.1
+SWSHROMTYPE ?= US
 
-all: starlight
+all: orionsbelt
 
-starlight:
-	$(MAKE) all -f MakefileNSO S2VER=$(S2VER) S2VERSTR=$(S2VERSTR)
-	$(MAKE) starlight_patch_$(S2VER)/*.ips
+orionsbelt:
+	$(MAKE) all -f MakefileNSO SWSHVER=$(SWSHVER) SWSHVERSTR=$(SWSHVERSTR)
+	$(MAKE) orionsbelt_patch_$(S2VER)/*.ips
 
-starlight_patch_$(S2VER)/*.ips: patches/*.slpatch patches/configs/$(S2VER).config patches/maps/$(S2VER)/*.map \
-								build$(S2VER)/$(shell basename $(CURDIR))$(S2VER).map scripts/genPatch.py
-	@rm -f starlight_patch_$(S2VER)/*.ips
-	python3 scripts/genPatch.py $(S2VER)
+orionsbelt_patch_$(SWSHVER)/*.ips: patches/*.swshpatch patches/configs/$(SWSHVER).config patches/maps/$(SWSHVER)/*.map \
+								build$(SWSHVER)/$(shell basename $(CURDIR))$(SWSHVER).map scripts/genPatch.py
+	@rm -f orionsbelt_patch_$(SWSHVER)/*.ips
+	python3 scripts/genPatch.py $(SWSHVER)
 
 send: all
-	python3 scripts/sendPatch.py $(IP) $(S2ROMTYPE) $(S2VER)
+	python3 scripts/sendPatch.py $(IP) $(SWSHROMTYPE) $(SWSHVER)
 
 clean:
 	$(MAKE) clean -f MakefileNSO
-	@rm -fr starlight_patch_*
+	@rm -fr orionsbelt_patch_*

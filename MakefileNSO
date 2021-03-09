@@ -1,14 +1,14 @@
 #---------------------------------------------------------------------------------
-# Starlight-specific
-# S2VER is the target version of Splatoon 2, but without the decimal points
+# Orions Belt-specific
+# SWSHVER is the target version of Splatoon 2, but without the decimal points
 # This can be changed by compiling for a different version (e.g. make 310)
 # (used for C defines, filenames, etc)
-# S2VERSTR is the target version of Splatoon 2
+# SWSHVERSTR is the target version of Pokemon SWSH
 # (used for user-facing stuff)
-# LINKERSCRIPTS is the directory where the function addresses for Splatoon 2 are
+# LINKERSCRIPTS is the directory where the function addresses for Pokemon SWSH are
 # stored
-# Each script is stored as syms$(S2VER).ld
-# (used for mapping Splatoon 2 functions to the proper address)
+# Each script is stored as syms$(SWSHVER).ld
+# (used for mapping Pokemon SWSH functions to the proper address)
 #---------------------------------------------------------------------------------
 
 LINKERSCRIPTS    := linkerscripts
@@ -31,8 +31,8 @@ include $(DEVKITPRO)/libnx/switch_rules
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		?=	$(notdir $(CURDIR))$(S2VER)
-BUILD		?=	build$(S2VER)
+TARGET		?=	$(notdir $(CURDIR))$(SWSHVER)
+BUILD		?=	build$(SWSHVER)
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
@@ -45,7 +45,7 @@ ARCH	:=	-march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIE
 CFLAGS	:=	-g -Wall -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
-CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -DS2VER=$(S2VER) -DS2VERSTR=$(S2VERSTR)
+CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -DSWSHVER=$(SWSHVER) -DSWSHVERSTR=$(SWSHVERSTR)
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -fpermissive
 
@@ -132,7 +132,7 @@ all: $(BUILD)
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
-	@cp $(LINKERSCRIPTS)/syms$(S2VER).ld $(LINKERSCRIPTS)/symstemp.ld # This is required because you can't pass a variable to the .specs
+	@cp $(LINKERSCRIPTS)/syms$(SWSHVER).ld $(LINKERSCRIPTS)/symstemp.ld # This is required because you can't pass a variable to the .specs
 	$(MAKE) -C $(BUILD) -f $(CURDIR)/MakefileNSO
 	@rm -f $(LINKERSCRIPTS)/symstemp.ld
 
